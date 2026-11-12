@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0756d8">
+  <title>MK Shop | Sua loja de variedades</title>
+  <meta name="description" content="Encontre produtos incríveis na MK Shop. Variedades, ofertas e novidades.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f7fc; color: #17243b; }
+    header { background: #0756d8; color: white; padding: 20px 7%; }
+    .topo { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+    .logo { font-size: 29px; font-weight: 900; letter-spacing: -1px; }
+    .logo span { color: #9cc8ff; }
+    .topo p { font-size: 13px; opacity: .9; }
+    .hero { background: linear-gradient(120deg,#0647b8,#1684ff); color: white; padding: 65px 7%; }
+    .hero h1 { font-size: clamp(32px,5vw,52px); max-width: 650px; margin-bottom: 15px; }
+    .hero p { font-size: 17px; line-height: 1.6; max-width: 550px; color: #e2edff; }
+    .container { max-width: 1150px; margin: auto; padding: 35px 20px; }
+    .busca { display: flex; gap: 10px; margin-bottom: 25px; }
+    input { width: 100%; padding: 15px; border: 1px solid #d7dfec; border-radius: 10px; font-size: 15px; outline-color: #0756d8; }
+    .categorias { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+    .categorias button { border: 1px solid #d8e2f2; background: white; padding: 10px 17px; border-radius: 25px; cursor: pointer; color: #244064; }
+    .categorias button.ativo { background: #0756d8; color: white; border-color: #0756d8; }
+    .titulo { font-size: 25px; margin-bottom: 20px; }
+    .produtos { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 20px; }
+    .produto { background: white; border: 1px solid #e5ebf4; border-radius: 15px; padding: 18px; box-shadow: 0 5px 18px #19365c0a; }
+    .foto { height: 155px; background: #edf3fc; border-radius: 10px; display: grid; place-items: center; font-size: 55px; margin-bottom: 15px; }
+    .produto h3 { margin-bottom: 8px; }
+    .produto p { color: #748197; font-size: 13px; min-height: 32px; line-height: 1.4; }
+    .preco { font-size: 22px; font-weight: 800; color: #0756d8; margin: 14px 0; }
+    .produto button, .whats { border: 0; background: #0756d8; color: white; padding: 12px; border-radius: 9px; cursor: pointer; font-weight: bold; width: 100%; }
+    .produto button:hover, .whats:hover { background: #0342a9; }
+    .vazio { color: #748197; padding: 25px 0; }
+    footer { background: #10233f; color: white; text-align: center; padding: 30px 15px; margin-top: 35px; }
+    footer p { color: #c0cce0; margin-top: 8px; font-size: 13px; }
+    @media(max-width:550px) { .hero { padding: 45px 6%; } .container { padding: 25px 15px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topo">
+      <div class="logo">MK <span>SHOP.</span></div>
+      <p>Variedades, novidades e boas ofertas!</p>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Encontre algo incrível para você.</h1>
+    <p>Bem-vindo à MK Shop! Uma loja de variedades com produtos para facilitar seu dia a dia e deixar seus momentos ainda melhores.</p>
+  </section>
+
+  <main class="container">
+    <div class="busca">
+      <input id="busca" type="search" placeholder="O que você está procurando?">
+    </div>
+
+    <div class="categorias">
+      <button class="ativo" data-cat="Todos">Todos</button>
+      <button data-cat="Casa">Casa</button>
+      <button data-cat="Brinquedos">Brinquedos</button>
+      <button data-cat="Eletrônicos">Eletrônicos</button>
+      <button data-cat="Outros">Outros</button>
+    </div>
+
+    <h2 class="titulo">Nossos produtos</h2>
+    <div class="produtos" id="produtos"></div>
+  </main>
+
+  <footer>
+    <strong>MK SHOP.</strong>
+    <p>Sua loja de variedades.</p>
+    <p>Pedidos e atendimento pelo WhatsApp.</p>
+    <p>© 2026 MK Shop. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const produtos = [
+      { nome: "Lâmpada de emergência", categoria: "Casa", descricao: "Iluminação prática para sua casa.", preco: 29.90, emoji: "💡" },
+      { nome: "Pisca-pisca LED", categoria: "Casa", descricao: "Deixe seu ambiente mais iluminado.", preco: 24.90, emoji: "✨" },
+      { nome: "Mini brinquedo", categoria: "Brinquedos", descricao: "Diversão para todas as horas.", preco: 19.90, emoji: "🧸" },
+      { nome: "Caixa de som", categoria: "Eletrônicos", descricao: "Música para acompanhar seu dia.", preco: 49.90, emoji: "🔊" }
+    ];
+
+    let categoria = "Todos";
+    const area = document.getElementById("produtos");
+    const busca = document.getElementById("busca");
+
+    function mostrarProdutos() {
+      const termo = busca.value.toLowerCase();
+      const filtrados = produtos.filter(p =>
+        (categoria === "Todos" || p.categoria === categoria) &&
+        p.nome.toLowerCase().includes(termo)
+      );
+
+      area.innerHTML = filtrados.length ? filtrados.map(p => `
+        <article class="produto">
+          <div class="foto">${p.emoji}</div>
+          <h3>${p.nome}</h3>
+          <p>${p.descricao}</p>
+          <div class="preco">${p.preco.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</div>
+          <button onclick="pedir('${p.nome.replace(/'/g,"")}')">Pedir pelo WhatsApp</button>
+        </article>
+      `).join("") : '<p class="vazio">Nenhum produto encontrado.</p>';
+    }
+
+    function pedir(nome) {
+      const mensagem = encodeURIComponent("Olá! Tenho interesse no produto: " + nome + ". Pode me passar mais informações?");
+      window.open("https://wa.me/5521983339415?text=" + mensagem, "_blank");
+    }
+
+    document.querySelectorAll(".categorias button").forEach(botao => {
+      botao.addEventListener("click", () => {
+        document.querySelector(".categorias .ativo").classList.remove("ativo");
+        botao.classList.add("ativo");
+        categoria = botao.dataset.cat;
+        mostrarProdutos();
+      });
+    });
+
+    busca.addEventListener("input", mostrarProdutos);
+    mostrarProdutos();
+  </script>
+</body>
+</html>

@@ -76,12 +76,7 @@
   </footer>
 
   <script>
-    const produtos = [
-      { nome: "Lâmpada de emergência", categoria: "Casa", descricao: "Iluminação prática para sua casa.", preco: 29.90, emoji: "💡" },
-      { nome: "Pisca-pisca LED", categoria: "Casa", descricao: "Deixe seu ambiente mais iluminado.", preco: 24.90, emoji: "✨" },
-      { nome: "Mini brinquedo", categoria: "Brinquedos", descricao: "Diversão para todas as horas.", preco: 19.90, emoji: "🧸" },
-      { nome: "Caixa de som", categoria: "Eletrônicos", descricao: "Música para acompanhar seu dia.", preco: 49.90, emoji: "🔊" }
-    ];
+    const produtos = [];
 
     let categoria = "Todos";
     const area = document.getElementById("produtos");
@@ -119,8 +114,8 @@
       });
     });
 
-    busca.addEventListener("input", mostrarProdutos);
-    mostrarProdutos();
+   busca.addEventListener("input", mostrarProdutos);
+mostrarProdutos();
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

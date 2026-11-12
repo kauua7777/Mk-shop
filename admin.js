@@ -37,7 +37,7 @@ document.getElementById("esqueci-senha")?.addEventListener("click", async () => 
   avisar("Enviando o link de recuperação...");
 
   const { error } = await adminClient.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/`
+    redirectTo: "https://mk-shop-flax.vercel.app/"
   });
 
   if (error) {

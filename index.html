@@ -137,29 +137,79 @@ mostrarProdutos();
 </section>
 
 <script>
-(() => {
-  const parametros = new URLSearchParams(window.location.hash.substring(1));
+ (() => {
+  const secao = document.getElementById("recuperacao");
+  const formulario = document.getElementById("formRecuperacao");
+  const mensagem = document.getElementById("mensagemSenha");
 
-  if (parametros.get("type") !== "recovery") return;
+  let recuperacaoValida = false;
 
-  document.querySelector(".hero").style.display = "none";
-  document.querySelector("main").style.display = "none";
+  secao.style.display = "none";
 
-  document.getElementById("recuperacao").style.display = "block";
+  function mostrarRecuperacao(session) {
+    recuperacaoValida = true;
 
-  document.getElementById("formRecuperacao").addEventListener("submit", async (event) => {
+    document.querySelector(".hero").style.display = "none";
+    document.querySelector("main").style.display = "none";
+    secao.style.display = "block";
+
+    mensagem.textContent =
+      "Recuperação confirmada para: " +
+      (session.user?.email || "sua conta") +
+      ". Cadastre uma senha nova.";
+  }
+
+  if (!mkClient) {
+    mensagem.textContent = "Não foi possível conectar ao Supabase.";
+    return;
+  }
+
+  const { data: listener } = mkClient.auth.onAuthStateChange(
+    (event, session) => {
+      if (event === "PASSWORD_RECOVERY" && session) {
+        mostrarRecuperacao(session);
+      }
+    }
+  );
+
+  formulario.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const senha = document.getElementById("novaSenha").value;
-    const mensagem = document.getElementById("mensagemSenha");
 
-    mensagem.textContent = "Salvando...";
+    if (!recuperacaoValida) {
+      mensagem.textContent =
+        "Sessão de recuperação não confirmada. Solicite um novo link.";
+      return;
+    }
 
-    const { error } = await mkClient.auth.updateUser({ password: senha });
+    mensagem.textContent = "Verificando sessão...";
 
-    mensagem.textContent = error
-      ? "Erro: " + error.message
-      : "Senha alterada com sucesso! Agora entre em /admin.html.";
+    const { data: { session }, error: erroSessao } =
+      await mkClient.auth.getSession();
+
+    if (erroSessao || !session) {
+      mensagem.textContent =
+        "Link expirado ou sessão inválida. Solicite outro link.";
+      return;
+    }
+
+    mensagem.textContent = "Salvando nova senha...";
+
+    const { error } = await mkClient.auth.updateUser({
+      password: senha
+    });
+
+    if (error) {
+      mensagem.textContent = "Erro: " + error.message;
+      return;
+    }
+
+    mensagem.textContent =
+      "Senha alterada com sucesso! Agora você pode entrar no painel administrativo.";
+
+    await mkClient.auth.signOut();
+    listener.subscription.unsubscribe();
   });
 })();
 </script>

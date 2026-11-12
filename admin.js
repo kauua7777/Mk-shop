@@ -19,15 +19,44 @@ function avisar(texto, erro = false) {
   mensagem.style.color = erro ? "#c62828" : "#087b42";
 }
 
+// RECUPERAÇÃO DE SENHA
+document.getElementById("esqueci-senha")?.addEventListener("click", async () => {
+  if (!adminClient) {
+    avisar("Configuração do Supabase não encontrada.", true);
+    return;
+  }
+
+  const email = document.getElementById("email-admin").value.trim();
+
+  if (!email) {
+    avisar("Digite seu e-mail antes de clicar em Esqueci minha senha.", true);
+    document.getElementById("email-admin").focus();
+    return;
+  }
+
+  avisar("Enviando o link de recuperação...");
+
+  const { error } = await adminClient.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/`
+  });
+
+  if (error) {
+    avisar("Não foi possível enviar o e-mail: " + error.message, true);
+    return;
+  }
+
+  avisar("Se o e-mail estiver cadastrado, você receberá um link para criar uma nova senha. Confira sua caixa de entrada e o spam.");
+});
+
 async function verificarAdmin() {
   if (!adminClient) {
     avisar("Configure o Supabase no config.js.", true);
     return;
   }
 
-  const { data: { user } } = await adminClient.auth.getUser();
+  const { data: { user }, error: erroLogin } = await adminClient.auth.getUser();
 
-  if (!user) {
+  if (erroLogin || !user) {
     loginArea.hidden = false;
     painel.hidden = true;
     return;
@@ -53,6 +82,11 @@ async function verificarAdmin() {
 
 document.getElementById("form-login")?.addEventListener("submit", async e => {
   e.preventDefault();
+
+  if (!adminClient) {
+    avisar("Configuração do Supabase não encontrada.", true);
+    return;
+  }
 
   const email = document.getElementById("email-admin").value;
   const senha = document.getElementById("senha-admin").value;

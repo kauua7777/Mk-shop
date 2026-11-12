@@ -122,5 +122,46 @@ mostrarProdutos();
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
+<section id="recuperacao" style="display:none; max-width:450px; margin:50px auto; padding:25px; background:white; border-radius:15px;">
+  <h2>Crie sua nova senha</h2>
+  <p>Digite sua nova senha para acessar a MK Shop.</p>
+
+  <form id="formRecuperacao">
+    <input id="novaSenha" type="password" placeholder="Nova senha" minlength="6" required>
+    <button type="submit" style="margin-top:15px; padding:12px; background:#0756d8; color:white; border:0; border-radius:8px; width:100%;">
+      Salvar nova senha
+    </button>
+  </form>
+
+  <p id="mensagemSenha" style="margin-top:15px;"></p>
+</section>
+
+<script>
+(() => {
+  const parametros = new URLSearchParams(window.location.hash.substring(1));
+
+  if (parametros.get("type") !== "recovery") return;
+
+  document.querySelector(".hero").style.display = "none";
+  document.querySelector("main").style.display = "none";
+
+  document.getElementById("recuperacao").style.display = "block";
+
+  document.getElementById("formRecuperacao").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const senha = document.getElementById("novaSenha").value;
+    const mensagem = document.getElementById("mensagemSenha");
+
+    mensagem.textContent = "Salvando...";
+
+    const { error } = await mkClient.auth.updateUser({ password: senha });
+
+    mensagem.textContent = error
+      ? "Erro: " + error.message
+      : "Senha alterada com sucesso! Agora entre em /admin.html.";
+  });
+})();
+</script>
 </body>
 </html>

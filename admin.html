@@ -15,6 +15,8 @@
     input, textarea, select { display: block; width: 100%; padding: 12px; border: 1px solid #d5deeb; border-radius: 8px; margin: 10px 0 15px; font-size: 15px; }
     button { background: #0756d8; color: white; border: 0; border-radius: 8px; padding: 12px 18px; cursor: pointer; font-weight: bold; }
     button:hover { background: #0342a9; }
+    .esqueci { background: transparent; color: #0756d8; padding: 12px 0; display: block; }
+    .esqueci:hover { background: transparent; text-decoration: underline; }
     .sair { background: #26364e; }
     label { font-weight: bold; }
     .linha { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
@@ -35,10 +37,16 @@
       <form id="form-login">
         <label for="email-admin">E-mail</label>
         <input id="email-admin" type="email" required placeholder="Seu e-mail">
+
         <label for="senha-admin">Senha</label>
         <input id="senha-admin" type="password" required placeholder="Sua senha">
+
         <button type="submit">Entrar</button>
       </form>
+
+      <button type="button" class="esqueci" id="esqueci-senha">
+        Esqueci minha senha
+      </button>
     </section>
 
     <p id="mensagem-admin" aria-live="polite"></p>

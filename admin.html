@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MK Shop | Administração</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f1f5fb; color: #17243b; }
+    header { background: #0756d8; color: white; padding: 22px; }
+    header h1 { margin: 0; }
+    main { max-width: 950px; margin: 30px auto; padding: 0 15px; }
+    .card { background: white; padding: 22px; border-radius: 14px; margin-bottom: 22px; box-shadow: 0 5px 20px #19365c0b; }
+    h2 { margin-top: 0; }
+    input, textarea, select { display: block; width: 100%; padding: 12px; border: 1px solid #d5deeb; border-radius: 8px; margin: 10px 0 15px; font-size: 15px; }
+    button { background: #0756d8; color: white; border: 0; border-radius: 8px; padding: 12px 18px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #0342a9; }
+    .sair { background: #26364e; }
+    label { font-weight: bold; }
+    .linha { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+    .linha input { width: auto; margin: 0; }
+    [hidden] { display: none !important; }
+    #mensagem-admin { margin: 12px 0; font-weight: bold; }
+    @media(max-width: 600px) { main { margin-top: 15px; } .card { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MK SHOP. | Painel administrativo</h1>
+  </header>
+
+  <main>
+    <section id="login-area" class="card">
+      <h2>Entrar na administração</h2>
+      <form id="form-login">
+        <label for="email-admin">E-mail</label>
+        <input id="email-admin" type="email" required placeholder="Seu e-mail">
+        <label for="senha-admin">Senha</label>
+        <input id="senha-admin" type="password" required placeholder="Sua senha">
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <p id="mensagem-admin" aria-live="polite"></p>
+
+    <section id="painel-admin" hidden>
+      <div class="card">
+        <h2>Bem-vindo à MK Shop!</h2>
+        <p>Gerencie os produtos e acompanhe os pedidos da sua loja.</p>
+        <button class="sair" id="sair-admin">Sair da conta</button>
+      </div>
+
+      <div class="card">
+        <h2>Cadastrar ou editar produto</h2>
+        <form id="form-produto">
+          <input type="hidden" id="produto-id">
+
+          <label for="produto-nome">Nome do produto</label>
+          <input id="produto-nome" required placeholder="Ex.: Lâmpada LED">
+
+          <label for="produto-descricao">Descrição</label>
+          <textarea id="produto-descricao" placeholder="Descreva o produto"></textarea>
+
+          <label for="produto-preco">Preço (R$)</label>
+          <input id="produto-preco" type="number" min="0" step="0.01" required>
+
+          <label for="produto-categoria">Categoria</label>
+          <select id="produto-categoria" required>
+            <option value="">Selecione</option>
+            <option value="Casa">Casa</option>
+            <option value="Brinquedos">Brinquedos</option>
+            <option value="Eletrônicos">Eletrônicos</option>
+            <option value="Outros">Outros</option>
+          </select>
+
+          <label for="produto-imagem">Link da imagem</label>
+          <input id="produto-imagem" type="url" placeholder="https://...">
+
+          <label for="produto-estoque">Quantidade em estoque</label>
+          <input id="produto-estoque" type="number" min="0" value="0">
+
+          <div class="linha">
+            <input id="produto-ativo" type="checkbox" checked>
+            <label for="produto-ativo">Produto ativo na loja</label>
+          </div>
+
+          <button type="submit">Salvar produto</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Produtos cadastrados</h2>
+        <div id="lista-produtos">Carregando...</div>
+      </div>
+
+      <div class="card">
+        <h2>Pedidos recebidos</h2>
+        <div id="lista-pedidos">Carregando...</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
